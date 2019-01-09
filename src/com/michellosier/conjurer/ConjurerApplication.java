@@ -14,8 +14,8 @@ public class ConjurerApplication {
         String name = inputScanner.next();
 
         setCurrentDeck(new Deck(name));
-        currentDeck.printCommandOptions();
-        currentDeck.invokeMethodFromCommand(inputScanner.next());
+        currentDeck.printCLInterface();
+        currentDeck.performAction(inputScanner.next());
 
     }
 

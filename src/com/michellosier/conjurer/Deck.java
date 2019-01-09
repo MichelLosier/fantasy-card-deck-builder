@@ -5,30 +5,26 @@ import java.util.*;
 public class Deck {
     private String name;
     private ArrayList<String> cards;
-    private Map<String, Runnable> methodMap = new HashMap<String, Runnable>();
+    private ArrayList<Option> CLInterface = new ArrayList<Option>();
+    private CommandParser commandParser;
 
     public Deck(String name) {
         this.name = name;
-        this.buildMethodMap();
+
+        this.buildCLInterface();
+        this.commandParser = new CommandParser(this.CLInterface);
     }
 
-    private void buildMethodMap(){
-        methodMap.put("name", () -> this.printName());
+    private void buildCLInterface(){
+       CLInterface.add(new Option("name", "Get the name of the deck", () -> this.printName()));
     }
 
-    public void printCommandOptions(){
-        System.out.println("Commands: \n");
-        methodMap.forEach((k, v) -> {
-            System.out.println(k +"\n");
-        });
+    public void performAction(String command){
+        commandParser.invokeMethodFromCommand(command);
     }
 
-    public void invokeMethodFromCommand(String cmd){
-        if (methodMap.containsKey(cmd)) {
-            methodMap.get(cmd).run();
-        } else {
-            System.out.printf("Command '%s' not recognized", cmd);
-        }
+    public void printCLInterface(){
+        commandParser.printCommandOptions();
     }
 
     public String getName() {
