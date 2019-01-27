@@ -10,12 +10,30 @@ public class ConjurerApplication {
     private static Deck currentDeck;
 
     public static void main(String[] args) {
-        System.out.println("New deck name:\n");
-        String name = inputScanner.next();
+        boolean exit = false;
+        Scanner input = new Scanner(System.in);
 
-        setCurrentDeck(new Deck(name));
-        currentDeck.printCLInterface();
-        currentDeck.performAction(inputScanner.next());
+        //initialize CLI for a test deck
+        Deck deck1 = new Deck("test");
+        DeckCLI deckCLI = new DeckCLI(deck1);
+        deckCLI.build();
+
+        while(exit == false){
+            String nextLine = input.nextLine();
+            if(nextLine.matches("exit")) {
+                exit = true;
+                return;
+            }
+
+            try {
+                CLICommand cmd = new CLICommand(nextLine);
+                deckCLI.handleCommand(cmd);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        input.close();
 
     }
 
