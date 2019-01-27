@@ -3,6 +3,7 @@ package com.michellosier.conjurer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class CLICommand{
     private String commandString;
@@ -80,6 +81,46 @@ public class CLICommand{
         } else {
             throw new Exception("Command string is incomplete");
         }
+    }
+
+    private Option matchCommandToOption(ArrayList<Option> options) throws Exception{
+
+        for(Option option:options){
+            String action = option.getAction();
+            String target = option.getTarget();
+
+            if(this.action.equals(action) && this.target.equals(target)){
+                return option;
+            }
+        }
+        throw new Exception("Command could not be matched to know option on this interface");
+    }
+
+    private HashMap<String, String> matchArguments(ArrayList<CLIArgument> optArgs){
+        HashMap<String, String> argValues = new HashMap<String, String>();
+
+        for(int i = 0; i < optArgs.size(); i++){
+            CLIArgument optArg = optArgs.get(i);
+            String optArgShort = optArg.getShortArg();
+            String optArgLong = optArg.getLongArg();
+
+            if(arguments.containsKey(optArgShort)){
+                argValues.put(optArgLong, arguments.get(optArgShort));
+            } else if (arguments.containsKey(optArgLong)){
+                argValues.put(optArgLong, arguments.get(optArgLong));
+            }
+
+        }
+
+        return argValues;
+    }
+
+
+    public void execute(ArrayList<Option> options) throws Exception{
+           Option option = matchCommandToOption(options);
+           HashMap<String, String> mappedArgs = matchArguments(option.getArguments());
+           Consumer callback = option.getCallback();
+           callback(mappedArgs);
     }
 
 }

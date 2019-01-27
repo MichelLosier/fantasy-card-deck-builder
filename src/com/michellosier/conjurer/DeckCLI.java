@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
+
 public class DeckCLI {
     private Deck deck;
     private ArrayList<Option> options;
@@ -13,12 +14,23 @@ public class DeckCLI {
     }
 
     public void handleCommand(CLICommand command){
+        try{
+            command.execute(this.options);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
-    private void buildOptions(){
-        options.add(new Option("get", "name", (args) -> this.getName(args)));
-        options.add(new Option("set", "name", (args) -> this.setName(args)));
+    public void build(){
+
+        //initialize options
+        Option getName = new Option("get", "name", (args) -> this.getName(args));
+        options.add(getName);
+
+        Option setName = new Option("set", "name", (args) -> this.setName(args));
+        setName.addArgument(new CLIArgument("n", "name",true ));
+        options.add(setName);
     }
 
     private void getName(HashMap<String, String> args){
@@ -27,8 +39,7 @@ public class DeckCLI {
     }
 
     private void setName(HashMap<String, String> args){
-
-        this.deck.setName(name);
+        this.deck.setName(args.get("name"));
     }
 
 

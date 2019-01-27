@@ -13,13 +13,25 @@ public class ConjurerApplication {
         boolean exit = false;
         Scanner input = new Scanner(System.in);
 
+        //initialize CLI for a test deck
+        Deck deck1 = new Deck("test");
+        DeckCLI deckCLI = new DeckCLI(deck1);
+        deckCLI.build();
+
         while(exit == false){
             String nextLine = input.nextLine();
             if(nextLine.matches("exit")) {
                 exit = true;
                 return;
             }
-            fooBarCLI.interpretCommand(nextLine);
+
+            try {
+                CLICommand cmd = new CLICommand(nextLine);
+                deckCLI.handleCommand(cmd);
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+
         }
         input.close();
 
