@@ -10,12 +10,18 @@ public class ConjurerApplication {
     private static Deck currentDeck;
 
     public static void main(String[] args) {
-        System.out.println("New deck name:\n");
-        String name = inputScanner.next();
+        boolean exit = false;
+        Scanner input = new Scanner(System.in);
 
-        setCurrentDeck(new Deck(name));
-        currentDeck.printCLInterface();
-        currentDeck.performAction(inputScanner.next());
+        while(exit == false){
+            String nextLine = input.nextLine();
+            if(nextLine.matches("exit")) {
+                exit = true;
+                return;
+            }
+            fooBarCLI.interpretCommand(nextLine);
+        }
+        input.close();
 
     }
 
