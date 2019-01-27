@@ -3,11 +3,12 @@ package com.michellosier.conjurer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
+import java.lang.reflect.Method;
 
 
 public class DeckCLI {
     private Deck deck;
-    private ArrayList<Option> options;
+    private ArrayList<Option> options = new ArrayList();
 
     public DeckCLI(Deck deck){
         this.deck = deck;
@@ -25,10 +26,10 @@ public class DeckCLI {
     public void build(){
 
         //initialize options
-        Option getName = new Option("get", "name", (args) -> this.getName(args));
+        Option getName = new Option("get", "name", "get deck name", this::getName);
         options.add(getName);
 
-        Option setName = new Option("set", "name", (args) -> this.setName(args));
+        Option setName = new Option("set", "name", "set deck name", this::setName);
         setName.addArgument(new CLIArgument("n", "name",true ));
         options.add(setName);
     }
@@ -40,6 +41,12 @@ public class DeckCLI {
 
     private void setName(HashMap<String, String> args){
         this.deck.setName(args.get("name"));
+    }
+
+    public void printOptions(){
+
+        //System.out.printf("%-10s -%s, -%s, expects: %s\n","", cliParamAnnotation.longName(), cliParamAnnotation.shortName(), cliParamAnnotation.value());
+
     }
 
 

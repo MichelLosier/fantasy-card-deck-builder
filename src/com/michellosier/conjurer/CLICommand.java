@@ -120,7 +120,8 @@ public class CLICommand{
            Option option = matchCommandToOption(options);
            HashMap<String, String> mappedArgs = matchArguments(option.getArguments());
            Consumer callback = option.getCallback();
-           callback(mappedArgs);
+           callback.accept(mappedArgs);
+
     }
 
 }
