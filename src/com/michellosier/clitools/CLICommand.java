@@ -1,4 +1,4 @@
-package com.michellosier.conjurer;
+package com.michellosier.clitools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,12 +53,24 @@ public class CLICommand{
         ArrayList<String> cmdArray = new ArrayList(Arrays.asList(this.commandString.split("\\s+"))); //split by whitespace
         int cmdSize = cmdArray.size();
 
-
-        if(cmdSize >= 3){
+        //minimum command requirements:
+        //1) entity namespace
+        //2) action
+        //3) target of action
+        if (cmdArray.get(0).equals("usage")){
+            setEntity("router");
+            setAction(cmdArray.get(0));
+            return;
+        } else if (cmdArray.get(1).equals("usage")) {
+            setEntity(cmdArray.get(0));
+            setAction(cmdArray.get(1));
+            return;
+        } else if(cmdSize >= 3){
             setEntity(cmdArray.get(0));
             setAction(cmdArray.get(1));
             setTarget(cmdArray.get(2));
 
+            //if command is greater than 3 then we have arguments
             if(cmdSize > 3){
                 for (int i = 3; i < cmdSize;){
                     String arg = cmdArray.get(i);
@@ -75,6 +87,11 @@ public class CLICommand{
                             addArgument(key, value);
                             i++;
                         }
+                    } else {
+                        String key = "default";
+                        String value = arg.substring(0);
+                        addArgument(key, value);
+                        i++;
                     }
                 }
             }

@@ -1,8 +1,11 @@
 package com.michellosier.conjurer;
 
+import com.michellosier.clitools.CLICommand;
+import com.michellosier.clitools.EntityCLI;
+import com.michellosier.clitools.CLIRouter;
+
 import java.util.*;
 
-//https://stackoverflow.com/questions/4480334/how-to-call-a-method-stored-in-a-hashmap-java
 
 public class ConjurerApplication {
 
@@ -13,10 +16,16 @@ public class ConjurerApplication {
         boolean exit = false;
         Scanner input = new Scanner(System.in);
 
+        CLIRouter router = new CLIRouter();
+
+
         //initialize CLI for a test deck
         Deck deck1 = new Deck("test");
-        DeckCLI deckCLI = new DeckCLI(deck1);
+
+        EntityCLI deckCLI = new DeckCLI(deck1);
         deckCLI.build();
+
+        router.addInterface(deckCLI);
 
         while(exit == false){
             String nextLine = input.nextLine();
@@ -27,7 +36,7 @@ public class ConjurerApplication {
 
             try {
                 CLICommand cmd = new CLICommand(nextLine);
-                deckCLI.handleCommand(cmd);
+                router.routeCommand(cmd);
             } catch(Exception e){
                 e.printStackTrace();
             }
