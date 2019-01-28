@@ -1,5 +1,4 @@
-package com.michellosier.conjurer;
-
+package com.michellosier.clitools;
 
 import java.util.HashMap;
 import java.util.ArrayList;

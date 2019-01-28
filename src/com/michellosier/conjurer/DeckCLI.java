@@ -1,37 +1,29 @@
 package com.michellosier.conjurer;
 
-import java.util.ArrayList;
+import com.michellosier.clitools.CLIArgument;
+import com.michellosier.clitools.Option;
+import com.michellosier.clitools.EntityCLI;
+
 import java.util.HashMap;
-import java.util.function.Consumer;
-import java.lang.reflect.Method;
 
 
-public class DeckCLI {
+public class DeckCLI extends EntityCLI {
     private Deck deck;
-    private ArrayList<Option> options = new ArrayList();
 
     public DeckCLI(Deck deck){
+        super("deck", "Interface for managing a deck of cards");
         this.deck = deck;
     }
 
-    public void handleCommand(CLICommand command){
-        try{
-            command.execute(this.options);
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-
-    }
-
+    @Override
     public void build(){
-
         //initialize options
         Option getName = new Option("get", "name", "get deck name", this::getName);
-        options.add(getName);
+        super.getOptions().add(getName);
 
         Option setName = new Option("set", "name", "set deck name", this::setName);
-        setName.addArgument(new CLIArgument("n", "name",true ));
-        options.add(setName);
+        setName.addArgument(new CLIArgument("n", "name","name value",true ));
+        super.getOptions().add(setName);
     }
 
     private void getName(HashMap<String, String> args){
@@ -40,14 +32,9 @@ public class DeckCLI {
     }
 
     private void setName(HashMap<String, String> args){
+
         this.deck.setName(args.get("name"));
+        System.out.printf("Deck name set to: %s\n", this.deck.getName());
     }
-
-    public void printOptions(){
-
-        //System.out.printf("%-10s -%s, -%s, expects: %s\n","", cliParamAnnotation.longName(), cliParamAnnotation.shortName(), cliParamAnnotation.value());
-
-    }
-
 
 }
